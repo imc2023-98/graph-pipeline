@@ -1,0 +1,23 @@
+services:
+  spark:
+    build: ./spark-parsing
+    command: --cleanup True /app/parse_graph.py --args "--cache-dir /app/cache_dir --out /app/out --output-type csv --parallelization 8 /app/2023-05-30-dns /app/2023-05-30-tls"
+    ports:
+      - "127.0.0.1:4040:4040"
+    volumes:
+      - ./parse_graph.py:/app/parse_graph.py:ro
+      - type: bind
+        source: ./example-data/2023-05-30-dns
+        target: /app/2023-05-30-dns
+        read_only: true
+      - type: bind
+        source: ./example-data/2023-05-30-tls
+        target: /app/2023-05-30-tls
+        read_only: true
+      - type: bind
+        source: ./example-data/cache_dir
+        target: /app/cache_dir
+      - type: bind
+        source: ./example-data/ITEgraph
+        target: /app/out
+
